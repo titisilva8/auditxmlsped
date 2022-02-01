@@ -39,7 +39,7 @@ type
     LabeledEdit6: TLabeledEdit;
     EditCampoXml: TLabeledEdit;
     LabeledEdit8: TLabeledEdit;
-    TabSheet5: TTabSheet;
+    EdtiTabelaSped: TTabSheet;
     OpenDialog1: TOpenDialog;
     SearchBox1: TSearchBox;
     Label1: TLabel;
@@ -52,9 +52,20 @@ type
     ACBrSPEDFiscal1: TACBrSPEDFiscal;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
+    EditTabelaSped: TLabeledEdit;
+    EditCampoSped: TLabeledEdit;
+    Button2: TButton;
+    LabeledEdit7: TLabeledEdit;
+    LabeledComboBox4: TLabeledComboBox;
+    LabeledEdit9: TLabeledEdit;
+    LabeledEdit10: TLabeledEdit;
+    LabeledComboBox5: TLabeledComboBox;
+    Button3: TButton;
     procedure SearchBox2InvokeSearch(Sender: TObject);
     procedure SearchBox1InvokeSearch(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -67,6 +78,7 @@ type
     procedure VerificaTagIde(TagXml,CamposTagXml:String);
     procedure ExecutarMetodo(pNomeClasseController, pNomeMetodo: String; pParametros:array of TValue; pMetodoRest: String; pTipoRetorno: String);
     function GetValorField(pTag, pNomeField: String):Variant;
+    function GetValorFieldSped(pTabela, pCampo: String;IndicePai,IndiceFilho:Integer): Variant;
 
 
   end;
@@ -107,6 +119,59 @@ begin
 
 end;}
 
+function TForm1.GetValorFieldSped(pTabela, pCampo: String;IndicePai,IndiceFilho:Integer): Variant;
+var
+  Contexto: TRttiContext;
+  TipoTag: TRttiType;
+  PropriedadeTag: TRttiProperty;
+  NomeTipo: String;
+  i: Integer;
+  Objeto:TObject;
+begin
+  Contexto := TRttiContext.Create;
+  try
+
+    if pTabela = 'C100' then
+    Objeto:= AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndicePai];
+
+
+    if pTabela = 'C170' then
+    Objeto:= AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndicePai].RegistroC170.Items[IndiceFilho];
+
+
+
+    TipoTag:= Contexto.GetType(Objeto.ClassInfo);
+    PropriedadeTag := TipoTag.GetProperty(pCampo);
+    NomeTipo := LowerCase(PropriedadeTag.PropertyType.Name);
+
+    if NomeTipo = 'tdatetime' then
+    begin
+      Result:=QuotedStr(FormatDateTime('dd/mm/yyyy hh:mm:ss',PropriedadeTag.GetValue(Objeto).AsExtended));
+    end
+
+    else
+    if PropriedadeTag.PropertyType.TypeKind in [tkString,tkUString] then
+    Result:=PropriedadeTag.GetValue(Objeto).AsString
+
+    else if PropriedadeTag.PropertyType.TypeKind = tkFloat then
+    Result:=PropriedadeTag.GetValue(Objeto).AsExtended
+
+    else if PropriedadeTag.PropertyType.TypeKind = tkInteger then
+    Result:=PropriedadeTag.GetValue(Objeto).AsInteger
+
+    else if PropriedadeTag.PropertyType.TypeKind = tkEnumeration then
+    Result:=PropriedadeTag.GetValue(Objeto).AsVariant
+
+    else if PropriedadeTag.PropertyType.TypeKind = tkVariant then
+    Result:=PropriedadeTag.GetValue(Objeto).AsVariant
+
+  finally
+    Contexto.Free;
+  end;
+
+end;
+
+
 
 function TForm1.GetValorField(pTag, pNomeField: String): Variant;
 var
@@ -125,6 +190,9 @@ begin
 
     if pTag = 'Emit' then
     Objeto:= AcbrNfe.NotasFiscais.Items[0].NFe.Emit;
+
+    if pTag = 'ICMSTot' then
+    Objeto:= AcbrNfe.NotasFiscais.Items[0].NFe.Total.ICMSTot;
 
     TipoTag:= Contexto.GetType(Objeto.ClassInfo);
     PropriedadeTag := TipoTag.GetProperty(pNomeField);
@@ -157,6 +225,69 @@ begin
 
 end;
 
+
+procedure TForm1.Button2Click(Sender: TObject);
+var I:Integer;
+quantidadeitensnf:integer;
+teste:String;
+begin
+  AcbrNfe.NotasFiscais.Clear;
+  AcbrNfe.NotasFiscais.LoadFromFile(SearchBox2.Text);
+
+  AcbrSpedFiscal.Arquivo:=SearchBox1.Text;
+  AcbrSpedFiscal.Importar;
+
+  Teste:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,0,0);
+
+  Showmessage(Teste);
+
+
+
+
+
+
+end;
+
+
+procedure TForm1.Button3Click(Sender: TObject);
+var CampoXml,CampoSped:Variant;
+  I,I2: Integer;
+  IndiceNfe:Integer;
+begin
+
+
+  AcbrSpedFiscal.Arquivo:=SearchBox1.Text;
+  AcbrSpedFiscal.Importar;
+
+  for I := 0 to OpenDialog.Files.Count-1 do
+  begin
+    AcbrNfe.NotasFiscais.Clear;
+    AcbrNfe.NotasFiscais.LoadFromFile(OpenDialog.Files[I]);
+
+    for I2 := 0 to AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Count-1 do
+    begin
+     if  AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[I2].CHV_NFE =
+     AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe then
+     begin
+       IndiceNfe:=I2;
+     end;
+    end;
+
+
+    CampoXml:=GetValorField(LabeledEdit3.Text,LabeledEdit2.Text);
+    CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceNfe,0);
+
+
+    if CampoXml <> CampoSped then
+    showmessage(VarToStr(CampoXml)+'  '+VarToStr(CampoSped)+ 'nf '+AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe);
+
+
+  end;
+
+
+
+
+end;
 
 procedure TForm1.ExecutarMetodo(pNomeClasseController, pNomeMetodo: String; pParametros:
 array of TValue; pMetodoRest: String; pTipoRetorno: String);

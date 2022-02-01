@@ -18,10 +18,10 @@ object Form1: TForm1
     Top = 0
     Width = 937
     Height = 451
-    ActivePage = TabSheet5
+    ActivePage = EdtiTabelaSped
     Align = alClient
     TabOrder = 0
-    object TabSheet5: TTabSheet
+    object EdtiTabelaSped: TTabSheet
       Caption = 'Arquivos Eletronicos'
       ImageIndex = 7
       object Label1: TLabel
@@ -45,8 +45,8 @@ object Form1: TForm1
         Height = 21
         TabOrder = 0
         Text = 
-          'D:\sped betoni e filgueiras\SpedEFD-17130078000123-0020549840087' +
-          '-Remessa de arquivo original-set2021.txt'
+          'C:\Users\cristiano\Downloads\Nf Betoni e Filgueiras\SpedEFD-1713' +
+          '0078000123-0020549840087-Remessa de arquivo original-ago2021.txt'
         OnInvokeSearch = SearchBox1InvokeSearch
       end
       object SearchBox2: TSearchBox
@@ -55,14 +55,12 @@ object Form1: TForm1
         Width = 433
         Height = 21
         TabOrder = 1
-        Text = 
-          'D:\sped betoni e filgueiras\LAP9KdOS\312109004301750001395500200' +
-          '00133741000134017.xml'
+        Text = 'C:\Users\cristiano\Downloads\Nf Betoni e Filgueiras agosto 2021'
         OnInvokeSearch = SearchBox2InvokeSearch
       end
       object Button1: TButton
         Left = 24
-        Top = 256
+        Top = 320
         Width = 137
         Height = 25
         Caption = 'Cruzar dados Sped'
@@ -78,7 +76,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Xml'
         TabOrder = 3
-        Text = 'serie'
+        Text = 'vICMS'
       end
       object LabeledEdit3: TLabeledEdit
         Left = 24
@@ -89,7 +87,119 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Tag Xml'
         TabOrder = 4
-        Text = 'Ide'
+        Text = 'ICMSTot'
+      end
+      object EditTabelaSped: TLabeledEdit
+        Left = 24
+        Top = 200
+        Width = 153
+        Height = 21
+        EditLabel.Width = 59
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Tabela Sped'
+        TabOrder = 5
+        Text = 'C100'
+      end
+      object EditCampoSped: TLabeledEdit
+        Left = 183
+        Top = 200
+        Width = 128
+        Height = 21
+        EditLabel.Width = 60
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Campo Sped'
+        TabOrder = 6
+        Text = 'VL_ICMS'
+      end
+      object Button2: TButton
+        Left = 183
+        Top = 320
+        Width = 137
+        Height = 25
+        Caption = 'Cruzar dados Sped'
+        TabOrder = 7
+        OnClick = Button2Click
+      end
+      object LabeledEdit7: TLabeledEdit
+        Left = 24
+        Top = 248
+        Width = 551
+        Height = 21
+        EditLabel.Width = 41
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Hist'#243'rico'
+        TabOrder = 8
+      end
+      object LabeledComboBox4: TLabeledComboBox
+        Left = 317
+        Top = 200
+        Width = 99
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 9
+        Text = 'Igual a'
+        Items.Strings = (
+          'Igual a'
+          'Diferente de'
+          'Menor que'
+          'Maior  que'
+          'Maior ou Igual a'
+          'Menor ou igual a'
+          '')
+        ComboBoxLabel.Width = 52
+        ComboBoxLabel.Height = 13
+        ComboBoxLabel.Caption = 'Tipo Regra'
+      end
+      object LabeledEdit9: TLabeledEdit
+        Left = 422
+        Top = 200
+        Width = 153
+        Height = 21
+        EditLabel.Width = 24
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Valor'
+        TabOrder = 10
+      end
+      object LabeledEdit10: TLabeledEdit
+        Left = 422
+        Top = 152
+        Width = 153
+        Height = 21
+        EditLabel.Width = 24
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Valor'
+        TabOrder = 11
+      end
+      object LabeledComboBox5: TLabeledComboBox
+        Left = 317
+        Top = 152
+        Width = 99
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 12
+        Text = 'Igual a'
+        Items.Strings = (
+          'Igual a'
+          'Diferente de'
+          'Menor que'
+          'Maior  que'
+          'Maior ou Igual a'
+          'Menor ou igual a'
+          '')
+        ComboBoxLabel.Width = 52
+        ComboBoxLabel.Height = 13
+        ComboBoxLabel.Caption = 'Tipo Regra'
+      end
+      object Button3: TButton
+        Left = 341
+        Top = 320
+        Width = 244
+        Height = 25
+        Caption = 'Cruzar Dados'
+        TabOrder = 13
+        OnClick = Button3Click
       end
     end
     object TabSheet1: TTabSheet
@@ -407,13 +517,13 @@ object Form1: TForm1
     Configuracoes.WebServices.AguardarConsultaRet = 0
     Configuracoes.WebServices.QuebradeLinha = '|'
     Configuracoes.RespTec.IdCSRT = 0
-    Left = 596
-    Top = 304
+    Left = 660
+    Top = 288
   end
   object ACBrSpedFiscal: TACBrSpedFiscalImportar
     ACBrSpedFiscal = ACBrSPEDFiscal1
-    Left = 596
-    Top = 224
+    Left = 660
+    Top = 184
   end
   object ACBrSPEDFiscal1: TACBrSPEDFiscal
     Path = 'C:\Program Files (x86)\Embarcadero\Studio\21.0\bin\'
@@ -421,7 +531,7 @@ object Form1: TForm1
     ReplaceDelimitador = False
     TrimString = True
     CurMascara = '#0.00'
-    Left = 724
-    Top = 208
+    Left = 660
+    Top = 96
   end
 end

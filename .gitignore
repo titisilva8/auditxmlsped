@@ -2,3 +2,8 @@
 PrototipoRegras.identcache
 PrototipoRegras.dproj.local
 PrototipoRegras.res
+*.dcu
+__recovery/__recovery.ini
+*.~3~
+*.~2~
+*.~1~
