@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, LabeledCtrls,
   Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB, Vcl.WinXCtrls, Vcl.Grids, Vcl.DBGrids,
   JvExDBGrids, JvDBGrid, JvDBUltimGrid,Vcl.FileCtrl, ACBrSpedFiscal, ACBrBase,
-  ACBrDFe, ACBrNFe, ACBrEFDImportar,System.StrUtils,System.Rtti,pcnProcNFe,pcnNFe;
+  ACBrDFe, ACBrNFe, ACBrEFDImportar,System.StrUtils,System.Rtti,pcnProcNFe,pcnNFe,
+  UDataModule,Datasnap.DBClient;
 
 type
   TForm1 = class(TForm)
@@ -55,17 +56,19 @@ type
     EditTabelaSped: TLabeledEdit;
     EditCampoSped: TLabeledEdit;
     Button2: TButton;
-    LabeledEdit7: TLabeledEdit;
+    EditHistorico: TLabeledEdit;
     LabeledComboBox4: TLabeledComboBox;
-    LabeledEdit9: TLabeledEdit;
-    LabeledEdit10: TLabeledEdit;
+    EditValorEsperadoSped: TLabeledEdit;
+    EditValorXml: TLabeledEdit;
     LabeledComboBox5: TLabeledComboBox;
     Button3: TButton;
+    DBGrid1: TDBGrid;
     procedure SearchBox2InvokeSearch(Sender: TObject);
     procedure SearchBox1InvokeSearch(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -77,9 +80,10 @@ type
     function GetValorCampoSped(TabelaSped,CampoSped:String;I:Integer):String;
     procedure VerificaTagIde(TagXml,CamposTagXml:String);
     procedure ExecutarMetodo(pNomeClasseController, pNomeMetodo: String; pParametros:array of TValue; pMetodoRest: String; pTipoRetorno: String);
-    function GetValorField(pTag, pNomeField: String):Variant;
+    function GetValorField(pTag, pNomeField: String;IndiceFilho:Integer):Variant;
     function GetValorFieldSped(pTabela, pCampo: String;IndicePai,IndiceFilho:Integer): Variant;
-
+    procedure RegistraErrosAdvertencias(NumeroNf,ChaveAcesso,ResultadoXml,ResultadoEsperadoSped,
+ ResultadoSped,Historico: String;Cds:TClientDataSet);
 
   end;
 
@@ -119,6 +123,23 @@ begin
 
 end;}
 
+
+ procedure TForm1.RegistraErrosAdvertencias(NumeroNf,ChaveAcesso,ResultadoXml,ResultadoEsperadoSped,
+ ResultadoSped,Historico: String;Cds:TClientDataSet);
+begin
+  Cds.Append;
+  Cds.FieldByName('NUMERO_DOCUMENTO').AsString:=NumeroNf;
+  Cds.FieldByName('CHAVE_ACESSO').AsString:=ChaveAcesso;
+  Cds.FieldByName('HISTORICO').AsString:=Historico;
+  Cds.FieldByName('RESULTADO_XML').AsString:=ResultadoXml;
+  Cds.FieldByName('RESULTADO_ESPERADO_SPED').AsString:=ResultadoEsperadoSped;
+  Cds.FieldByName('RESULTADO_SPED').AsString:=ResultadoSped;
+  Cds.Post;
+end;
+
+
+
+
 function TForm1.GetValorFieldSped(pTabela, pCampo: String;IndicePai,IndiceFilho:Integer): Variant;
 var
   Contexto: TRttiContext;
@@ -134,11 +155,8 @@ begin
     if pTabela = 'C100' then
     Objeto:= AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndicePai];
 
-
     if pTabela = 'C170' then
     Objeto:= AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndicePai].RegistroC170.Items[IndiceFilho];
-
-
 
     TipoTag:= Contexto.GetType(Objeto.ClassInfo);
     PropriedadeTag := TipoTag.GetProperty(pCampo);
@@ -173,7 +191,7 @@ end;
 
 
 
-function TForm1.GetValorField(pTag, pNomeField: String): Variant;
+function TForm1.GetValorField(pTag, pNomeField: String;IndiceFilho:Integer): Variant;
 var
   Contexto: TRttiContext;
   TipoTag: TRttiType;
@@ -193,6 +211,9 @@ begin
 
     if pTag = 'ICMSTot' then
     Objeto:= AcbrNfe.NotasFiscais.Items[0].NFe.Total.ICMSTot;
+
+    if pTag = 'prod' then
+    Objeto:= AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[IndiceFilho].Prod;
 
     TipoTag:= Contexto.GetType(Objeto.ClassInfo);
     PropriedadeTag := TipoTag.GetProperty(pNomeField);
@@ -251,10 +272,10 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 var CampoXml,CampoSped:Variant;
-  I,I2: Integer;
+  I,I2,I3,TamanhoListaXml,TamanhoListaSped: Integer;
   IndiceNfe:Integer;
 begin
-
+  DataModuleRegras.CdsRelErrosAdvertencias.EmptyDataSet;
 
   AcbrSpedFiscal.Arquivo:=SearchBox1.Text;
   AcbrSpedFiscal.Importar;
@@ -274,12 +295,67 @@ begin
     end;
 
 
-    CampoXml:=GetValorField(LabeledEdit3.Text,LabeledEdit2.Text);
-    CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceNfe,0);
 
 
-    if CampoXml <> CampoSped then
-    showmessage(VarToStr(CampoXml)+'  '+VarToStr(CampoSped)+ 'nf '+AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe);
+    if LabeledEdit3.Text = 'prod' then
+    TamanhoListaXml:= AcbrNfe.NotasFiscais.Items[0].NFe.Det.Count
+    else
+    TamanhoListaXml:=1;
+
+    if EditTabelaSped.Text = 'C170' then
+    TamanhoListaSped:= AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndiceNfe].RegistroC170.Count
+    else
+    TamanhoListaSped:=1;
+
+
+    if TamanhoListaXml <> TamanhoListaSped then
+    begin
+      RegistraErrosAdvertencias(AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+      AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,
+      '',
+      '',
+      '',
+      'Quantidade de Itens diferentes entre xml e sped',DataModuleRegras.CdsRelErrosAdvertencias);
+    end
+
+
+    else
+    begin
+      for I3 := 0 to TamanhoListaXml-1 do
+      begin
+
+        CampoXml:=GetValorField(LabeledEdit3.Text,LabeledEdit2.Text,I3);
+
+        if EditValorXml.Text<>'' then
+        if VarToStr(CampoXml) = EditValorXml.Text then
+        begin
+          CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceNfe,I3);
+          if EditValorEsperadoSped.Text <> VarToStr(CampoSped) then
+          RegistraErrosAdvertencias(AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+          AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,
+          VarToStr(CampoXml),
+          VarToStr(EditValorEsperadoSped.Text),
+          VarToStr(CampoSped),
+          EditHistorico.Text,DataModuleRegras.CdsRelErrosAdvertencias);
+        end;
+
+        if EditValorXml.Text='' then
+        begin
+          CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceNfe,I3);
+          if CampoXml <> CampoSped then
+          RegistraErrosAdvertencias(AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+          AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,
+          VarToStr(CampoXml),
+          VarToStr(CampoXml),
+          VarToStr(CampoSped),
+          EditHistorico.Text,DataModuleRegras.CdsRelErrosAdvertencias);
+        end;
+      end;
+
+
+    end;
+
+    //showmessage(VarToStr(CampoXml)+'  '+VarToStr(CampoSped)+ 'nf '+AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe);
 
 
   end;
@@ -313,6 +389,11 @@ begin
 end;
 
 
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  DataModuleRegras.CdsRelErrosAdvertencias.CreateDataSet;
+end;
 
 procedure TForm1.SearchBox1InvokeSearch(Sender: TObject);
 begin
@@ -348,7 +429,7 @@ begin
 
  // VerificaTagIde;
 
-  Teste:=GetValorField(LabeledEdit3.Text,LabeledEdit2.Text);
+  Teste:=GetValorField(LabeledEdit3.Text,LabeledEdit2.Text,0);
 
 
 

@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 451
+  ClientHeight = 605
   ClientWidth = 937
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -11,16 +11,18 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object PageControl1: TPageControl
     Left = 0
     Top = 0
     Width = 937
-    Height = 451
+    Height = 605
     ActivePage = EdtiTabelaSped
     Align = alClient
     TabOrder = 0
+    ExplicitHeight = 451
     object EdtiTabelaSped: TTabSheet
       Caption = 'Arquivos Eletronicos'
       ImageIndex = 7
@@ -76,7 +78,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Xml'
         TabOrder = 3
-        Text = 'vICMS'
+        Text = 'CFOP'
       end
       object LabeledEdit3: TLabeledEdit
         Left = 24
@@ -87,7 +89,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Tag Xml'
         TabOrder = 4
-        Text = 'ICMSTot'
+        Text = 'prod'
       end
       object EditTabelaSped: TLabeledEdit
         Left = 24
@@ -98,7 +100,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Tabela Sped'
         TabOrder = 5
-        Text = 'C100'
+        Text = 'C170'
       end
       object EditCampoSped: TLabeledEdit
         Left = 183
@@ -109,7 +111,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Sped'
         TabOrder = 6
-        Text = 'VL_ICMS'
+        Text = 'CFOP'
       end
       object Button2: TButton
         Left = 183
@@ -120,7 +122,7 @@ object Form1: TForm1
         TabOrder = 7
         OnClick = Button2Click
       end
-      object LabeledEdit7: TLabeledEdit
+      object EditHistorico: TLabeledEdit
         Left = 24
         Top = 248
         Width = 551
@@ -151,7 +153,7 @@ object Form1: TForm1
         ComboBoxLabel.Height = 13
         ComboBoxLabel.Caption = 'Tipo Regra'
       end
-      object LabeledEdit9: TLabeledEdit
+      object EditValorEsperadoSped: TLabeledEdit
         Left = 422
         Top = 200
         Width = 153
@@ -161,9 +163,9 @@ object Form1: TForm1
         EditLabel.Caption = 'Valor'
         TabOrder = 10
       end
-      object LabeledEdit10: TLabeledEdit
+      object EditValorXml: TLabeledEdit
         Left = 422
-        Top = 152
+        Top = 154
         Width = 153
         Height = 21
         EditLabel.Width = 24
@@ -173,7 +175,7 @@ object Form1: TForm1
       end
       object LabeledComboBox5: TLabeledComboBox
         Left = 317
-        Top = 152
+        Top = 154
         Width = 99
         Height = 21
         Style = csDropDownList
@@ -200,6 +202,20 @@ object Form1: TForm1
         Caption = 'Cruzar Dados'
         TabOrder = 13
         OnClick = Button3Click
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 376
+        Width = 929
+        Height = 201
+        Align = alBottom
+        DataSource = DataModuleRegras.DSRelErrosAdvertencias
+        TabOrder = 14
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
       end
     end
     object TabSheet1: TTabSheet
@@ -273,7 +289,7 @@ object Form1: TForm1
         Left = 0
         Top = 0
         Width = 929
-        Height = 423
+        Height = 577
         Align = alClient
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -296,7 +312,7 @@ object Form1: TForm1
         Left = 0
         Top = 0
         Width = 929
-        Height = 423
+        Height = 577
         Align = alClient
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -319,7 +335,7 @@ object Form1: TForm1
         Left = 0
         Top = 0
         Width = 929
-        Height = 423
+        Height = 577
         Align = alClient
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -342,7 +358,7 @@ object Form1: TForm1
         Left = 0
         Top = 0
         Width = 929
-        Height = 423
+        Height = 577
         Align = alClient
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -365,7 +381,7 @@ object Form1: TForm1
         Left = 0
         Top = 0
         Width = 929
-        Height = 423
+        Height = 577
         Align = alClient
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
