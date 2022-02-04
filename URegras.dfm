@@ -46,17 +46,19 @@ object Form1: TForm1
         Height = 21
         TabOrder = 0
         Text = 
-          'C:\Users\cristiano\Downloads\Nf Betoni e Filgueiras\SpedEFD-1713' +
-          '0078000123-0020549840087-Remessa de arquivo original-ago2021.txt'
+          'D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-00104' +
+          '17880006-Remessa de arquivo original-dez2021 - Reti.txt'
         OnInvokeSearch = EditPathSpedFiscalInvokeSearch
       end
       object SearchBox2: TSearchBox
         Left = 24
-        Top = 88
+        Top = 92
         Width = 433
         Height = 21
         TabOrder = 1
-        Text = 'C:\Users\cristiano\Downloads\Nf Betoni e Filgueiras agosto 2021'
+        Text = 
+          'D:\Arquivos Black Slate\Arquivos Xml 12-2021\3121120065022300010' +
+          '2558030000012401790999281.xml'
         OnInvokeSearch = SearchBox2InvokeSearch
       end
       object Button1: TButton
