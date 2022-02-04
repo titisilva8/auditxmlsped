@@ -258,11 +258,11 @@ end;
 procedure TForm1.Button3Click(Sender: TObject);
 var CampoXml,CampoSped:Variant;
   I,I2,I3,TamanhoListaXml,TamanhoListaSped: Integer;
-  IndiceTabelaMestreSped:Variant;
-  ObjetoListaXmlSpedFiscal:TRetornoTamanhoLista;
+  IndiceTabelaMestreSped:Integer;
 begin
   TRegrasController.LimpaCdsAdvertencias;
   TRegrasController.ImportaSpedFiscal(EditPathSpedFiscal.Text);
+
 
   for I := 0 to OpenDialog.Files.Count-1 do
   begin
@@ -271,42 +271,57 @@ begin
     IndiceTabelaMestreSped:=TRegrasController.GetIndiceTabelaSped(EditTabelaSped.Text,
     TRegrasController.GetValorPesquisaParaEncontrarIndice(EditTabelaSped.Text));
 
-    if IndiceTabelaMestreSped = false then
+    if IndiceTabelaMestreSped = 999999 then
     TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
-    DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,'','','','Nota Fiscal não encontrada em arquivo Sped Fiscal')
+    DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,'','','','Nota Fiscal não encontrada em arquivo Sped Fiscal');
 
-    else
+
+
+    if TRegrasController.VerificaQuantidadeItensXmltoSped(EditTagXml.Text,EditTabelaSped.Text,IndiceTabelaMestreSped) then
+
     begin
-      ObjetoListaXmlSpedFiscal:=TRegrasController.VerificaQuantidadeItensXmltoSped(EditTagXml.Text,EditTabelaSped.Text,IndiceTabelaMestreSped);
-      if ObjetoListaXmlSpedFiscal.QuantidadeItensEntreListasIguais then
+      for I3 := 0 to TamanhoListaXml-1 do
       begin
-        for I3 := 0 to ObjetoListaXmlSpedFiscal.QuatidadeListaXml-1 do
+
+        CampoXml:=GetValorField(EditTagXml.Text,EditCampoXml.Text,I3);
+
+        if EditValorXml.Text<>'' then
+        if VarToStr(CampoXml) = EditValorXml.Text then
         begin
-          CampoXml:=GetValorField(EditTagXml.Text,EditCampoXml.Text,I3);
-          if EditValorXml.Text<>'' then
-          if VarToStr(CampoXml) = EditValorXml.Text then
-          begin
-            CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceTabelaMestreSped,I3);
-            if EditValorEsperadoSped.Text <> VarToStr(CampoSped) then
-            TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
-            DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,VarToStr(CampoXml),
-            VarToStr(EditValorEsperadoSped.Text),VarToStr(CampoSped),EditHistorico.Text);
-          end;
+          CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceTabelaMestreSped,I3);
+          if EditValorEsperadoSped.Text <> VarToStr(CampoSped) then
+          TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+          DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,
+          VarToStr(CampoXml),
+          VarToStr(EditValorEsperadoSped.Text),
+          VarToStr(CampoSped),
+          EditHistorico.Text);
+        end;
 
-
-          if EditValorXml.Text='' then
-          begin
-            CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceTabelaMestreSped,I3);
-            if CampoXml <> CampoSped then
-            TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
-            DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,VarToStr(CampoXml),
-            VarToStr(CampoXml),VarToStr(CampoSped),EditHistorico.Text);
-          end;
+        if EditValorXml.Text='' then
+        begin
+          CampoSped:=GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,IndiceTabelaMestreSped,I3);
+          if CampoXml <> CampoSped then
+          TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+          DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,
+          VarToStr(CampoXml),
+          VarToStr(CampoXml),
+          VarToStr(CampoSped),
+          EditHistorico.Text);
         end;
       end;
+
+
     end;
 
+    //showmessage(VarToStr(CampoXml)+'  '+VarToStr(CampoSped)+ 'nf '+AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe);
+
+
   end;
+
+
+
+
 end;
 
 procedure TForm1.ExecutarMetodo(pNomeClasseController, pNomeMetodo: String; pParametros:

@@ -19,7 +19,7 @@ uses  Winapi.Windows, Winapi.Messages, Winapi.ShellAPI,
   Type TRegrasController = class
     private
     public
-      class function GetIndiceTabelaSped(Tabela,Pesquisa:String):Variant;
+      class function GetIndiceTabelaSped(Tabela,Pesquisa:String):Integer;
       class procedure LimpaCdsAdvertencias;
       class function ImportaSpedFiscal(Path:String):boolean;
       class function GetValorPesquisaParaEncontrarIndice(Tabela:String):String;
@@ -51,10 +51,10 @@ begin
   end;
 end;
 
-class function TRegrasController.GetIndiceTabelaSped(Tabela,Pesquisa: String): Variant;
+class function TRegrasController.GetIndiceTabelaSped(Tabela,Pesquisa: String): Integer;
 var i:Integer;
 begin
-  Result:=false;
+  Result:=999999;
   if (Tabela = 'C100') or (Tabela = 'C170')  then
   begin
     for i := 0 to DataModuleRegras.AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Count-1 do
@@ -94,6 +94,7 @@ end;
 
 class function TRegrasController.VerificaQuantidadeItensXmltoSped(TagXml,TabelaSped: String;
 IndiceTabelaMestreSpedFiscal:Integer): TRetornoTamanhoLista;
+var QuantidadeItensXml,QuantidadeItensSped:Integer;
 begin
   Result.QuantidadeItensEntreListasIguais:=True;
 
@@ -108,7 +109,7 @@ begin
   Result.QuantidadeListaSped:=1;
 
 
-  if Result.QuatidadeListaXml <> Result.QuantidadeListaSped then
+  if QuantidadeItensXml <> QuantidadeItensSped then
   begin
     RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
     DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,'','','','Quantidade de Itens diferentes entre xml e sped');

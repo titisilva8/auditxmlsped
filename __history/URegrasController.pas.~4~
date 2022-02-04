@@ -10,21 +10,15 @@ uses  Winapi.Windows, Winapi.Messages, Winapi.ShellAPI,
   ACBrBase, ACBrDFe, ACBrNFe, Data.DB,Vcl.Grids, Vcl.DBGrids, JvExDBGrids,
   JvDBGrid, JvDBUltimGrid,Datasnap.DBClient, Vcl.Buttons,pcnConversao,UDataModule;
 
-  type TRetornoTamanhoLista = Record
-    QuantidadeItensEntreListasIguais:boolean;
-    QuatidadeListaXml:Integer;
-    QuantidadeListaSped:Integer;
-  End;
-
   Type TRegrasController = class
     private
     public
-      class function GetIndiceTabelaSped(Tabela,Pesquisa:String):Variant;
+      class function GetIndiceTabelaSped(Tabela,Pesquisa:String):Integer;
       class procedure LimpaCdsAdvertencias;
       class function ImportaSpedFiscal(Path:String):boolean;
       class function GetValorPesquisaParaEncontrarIndice(Tabela:String):String;
       class function CarregaArquivoXml(PathArquivoXml:String):boolean;
-      class function VerificaQuantidadeItensXmltoSped(TagXml,TabelaSped: String;IndiceTabelaMestreSpedFiscal:Integer):TRetornoTamanhoLista;
+      class function VerificaQuantidadeItensXmltoSped(TagXml,TabelaSped: String;IndiceTabelaMestreSpedFiscal:Integer):boolean;
       class procedure RegistraErrosAdvertencias(NumeroNf,ChaveAcesso,ResultadoXml,ResultadoEsperadoSped,ResultadoSped,Historico: String);
   end;
 
@@ -51,10 +45,10 @@ begin
   end;
 end;
 
-class function TRegrasController.GetIndiceTabelaSped(Tabela,Pesquisa: String): Variant;
+class function TRegrasController.GetIndiceTabelaSped(Tabela,Pesquisa: String): Integer;
 var i:Integer;
 begin
-  Result:=false;
+  Result:=999999;
   if (Tabela = 'C100') or (Tabela = 'C170')  then
   begin
     for i := 0 to DataModuleRegras.AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Count-1 do
@@ -93,26 +87,31 @@ begin
 end;
 
 class function TRegrasController.VerificaQuantidadeItensXmltoSped(TagXml,TabelaSped: String;
-IndiceTabelaMestreSpedFiscal:Integer): TRetornoTamanhoLista;
+IndiceTabelaMestreSpedFiscal:Integer): boolean;
+var QuantidadeItensXml,QuantidadeItensSped:Integer;
 begin
-  Result.QuantidadeItensEntreListasIguais:=True;
+  Result:=True;
 
   if TagXml = 'prod' then
-  Result.QuatidadeListaXml:= DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Det.Count
+  QuantidadeItensXml:= DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Det.Count
   else
-  Result.QuatidadeListaXml:=1;
+  QuantidadeItensXml:=1;
 
   if TabelaSped = 'C170' then
-  Result.QuantidadeListaSped:= DataModuleRegras.AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndiceTabelaMestreSpedFiscal].RegistroC170.Count
+  QuantidadeItensSped:= DataModuleRegras.AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[IndiceTabelaMestreSpedFiscal].RegistroC170.Count
   else
-  Result.QuantidadeListaSped:=1;
+  QuantidadeItensSped:=1;
 
 
-  if Result.QuatidadeListaXml <> Result.QuantidadeListaSped then
+  if QuantidadeItensXml <> QuantidadeItensSped then
   begin
     RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
-    DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,'','','','Quantidade de Itens diferentes entre xml e sped');
-    Result.QuantidadeItensEntreListasIguais:=false;
+    DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,
+    '',
+    '',
+    '',
+    'Quantidade de Itens diferentes entre xml e sped');
+    Result:=false;
   end
 
 end;

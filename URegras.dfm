@@ -22,7 +22,6 @@ object Form1: TForm1
     ActivePage = EdtiTabelaSped
     Align = alClient
     TabOrder = 0
-    ExplicitHeight = 451
     object EdtiTabelaSped: TTabSheet
       Caption = 'Arquivos Eletronicos'
       ImageIndex = 7
@@ -40,7 +39,7 @@ object Form1: TForm1
         Height = 13
         Caption = 'Arquivos Xml'
       end
-      object SearchBox1: TSearchBox
+      object EditPathSpedFiscal: TSearchBox
         Left = 24
         Top = 32
         Width = 433
@@ -49,7 +48,7 @@ object Form1: TForm1
         Text = 
           'C:\Users\cristiano\Downloads\Nf Betoni e Filgueiras\SpedEFD-1713' +
           '0078000123-0020549840087-Remessa de arquivo original-ago2021.txt'
-        OnInvokeSearch = SearchBox1InvokeSearch
+        OnInvokeSearch = EditPathSpedFiscalInvokeSearch
       end
       object SearchBox2: TSearchBox
         Left = 24
@@ -69,7 +68,7 @@ object Form1: TForm1
         TabOrder = 2
         OnClick = Button1Click
       end
-      object LabeledEdit2: TLabeledEdit
+      object EditCampoXml: TLabeledEdit
         Left = 183
         Top = 154
         Width = 128
@@ -80,7 +79,7 @@ object Form1: TForm1
         TabOrder = 3
         Text = 'CFOP'
       end
-      object LabeledEdit3: TLabeledEdit
+      object EditTagXml: TLabeledEdit
         Left = 24
         Top = 154
         Width = 153
@@ -421,7 +420,7 @@ object Form1: TForm1
         ComboBoxLabel.Height = 13
         ComboBoxLabel.Caption = 'Tipo Regra'
       end
-      object EditTagXml: TLabeledEdit
+      object EditTagXml1: TLabeledEdit
         Left = 3
         Top = 40
         Width = 153
@@ -492,7 +491,7 @@ object Form1: TForm1
         EditLabel.Caption = 'Hist'#243'rico'
         TabOrder = 6
       end
-      object EditCampoXml: TLabeledEdit
+      object EditCampoXml1: TLabeledEdit
         Left = 162
         Top = 40
         Width = 128
@@ -521,33 +520,5 @@ object Form1: TForm1
   object OpenDialog2: TOpenDialog
     Left = 524
     Top = 128
-  end
-  object ACBrNFe: TACBrNFe
-    Configuracoes.Geral.SSLLib = libNone
-    Configuracoes.Geral.SSLCryptLib = cryNone
-    Configuracoes.Geral.SSLHttpLib = httpNone
-    Configuracoes.Geral.SSLXmlSignLib = xsNone
-    Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
-    Configuracoes.Arquivos.OrdenacaoPath = <>
-    Configuracoes.WebServices.UF = 'SP'
-    Configuracoes.WebServices.AguardarConsultaRet = 0
-    Configuracoes.WebServices.QuebradeLinha = '|'
-    Configuracoes.RespTec.IdCSRT = 0
-    Left = 660
-    Top = 288
-  end
-  object ACBrSpedFiscal: TACBrSpedFiscalImportar
-    ACBrSpedFiscal = ACBrSPEDFiscal1
-    Left = 660
-    Top = 184
-  end
-  object ACBrSPEDFiscal1: TACBrSPEDFiscal
-    Path = 'C:\Program Files (x86)\Embarcadero\Studio\21.0\bin\'
-    Delimitador = '|'
-    ReplaceDelimitador = False
-    TrimString = True
-    CurMascara = '#0.00'
-    Left = 660
-    Top = 96
   end
 end

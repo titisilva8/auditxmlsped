@@ -3,7 +3,8 @@ unit UDataModule;
 interface
 
 uses
-  System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient;
+  System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient, ACBrDFe, ACBrNFe,
+  ACBrEFDImportar, ACBrBase, ACBrSpedFiscal;
 
 type
   TDataModuleRegras = class(TDataModule)
@@ -17,6 +18,9 @@ type
     CdsRelErrosAdvertenciasRESULTADO_XML: TStringField;
     CdsRelErrosAdvertenciasRESULTADO_ESPERADO_SPED: TStringField;
     CdsRelErrosAdvertenciasRESULTADO_SPED: TStringField;
+    ACBrSPEDFiscal1: TACBrSPEDFiscal;
+    ACBrSpedFiscal: TACBrSpedFiscalImportar;
+    ACBrNFe: TACBrNFe;
   private
     { Private declarations }
   public

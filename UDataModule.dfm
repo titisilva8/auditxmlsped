@@ -1,7 +1,7 @@
 object DataModuleRegras: TDataModuleRegras
   OldCreateOrder = False
-  Height = 310
-  Width = 600
+  Height = 369
+  Width = 818
   object DSRelErrosAdvertencias: TDataSource
     DataSet = CdsRelErrosAdvertencias
     Left = 303
@@ -58,5 +58,33 @@ object DataModuleRegras: TDataModuleRegras
       FieldName = 'IDENTIFICADOR_ERRO_ADVERTENCIA'
       Size = 1
     end
+  end
+  object ACBrSPEDFiscal1: TACBrSPEDFiscal
+    Path = 'C:\Program Files (x86)\Embarcadero\Studio\21.0\bin\'
+    Delimitador = '|'
+    ReplaceDelimitador = False
+    TrimString = True
+    CurMascara = '#0.00'
+    Left = 568
+    Top = 96
+  end
+  object ACBrSpedFiscal: TACBrSpedFiscalImportar
+    ACBrSpedFiscal = ACBrSPEDFiscal1
+    Left = 568
+    Top = 184
+  end
+  object ACBrNFe: TACBrNFe
+    Configuracoes.Geral.SSLLib = libNone
+    Configuracoes.Geral.SSLCryptLib = cryNone
+    Configuracoes.Geral.SSLHttpLib = httpNone
+    Configuracoes.Geral.SSLXmlSignLib = xsNone
+    Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
+    Configuracoes.Arquivos.OrdenacaoPath = <>
+    Configuracoes.WebServices.UF = 'SP'
+    Configuracoes.WebServices.AguardarConsultaRet = 0
+    Configuracoes.WebServices.QuebradeLinha = '|'
+    Configuracoes.RespTec.IdCSRT = 0
+    Left = 568
+    Top = 278
   end
 end
