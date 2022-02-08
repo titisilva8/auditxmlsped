@@ -79,7 +79,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Xml'
         TabOrder = 3
-        Text = 'CFOP'
+        Text = 'vCredICMSSN'
       end
       object EditTagXml: TLabeledEdit
         Left = 24
@@ -90,7 +90,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Tag Xml'
         TabOrder = 4
-        Text = 'prod'
+        Text = 'ICMSSN101'
       end
       object EditTabelaSped: TLabeledEdit
         Left = 24
@@ -112,7 +112,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Sped'
         TabOrder = 6
-        Text = 'CFOP'
+        Text = 'VL_ICMS'
       end
       object Button2: TButton
         Left = 183
@@ -125,9 +125,9 @@ object Form1: TForm1
       end
       object EditHistorico: TLabeledEdit
         Left = 24
-        Top = 248
+        Top = 288
         Width = 551
-        Height = 21
+        Height = 22
         EditLabel.Width = 41
         EditLabel.Height = 13
         EditLabel.Caption = 'Hist'#243'rico'
@@ -217,6 +217,23 @@ object Form1: TForm1
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
+      end
+      object ComboboxRegimeTributario: TLabeledComboBox
+        Left = 24
+        Top = 242
+        Width = 551
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 15
+        Text = '1-Simples Nacional'
+        Items.Strings = (
+          '1-Simples Nacional'
+          '2-Simples Nacional - excesso de sublimite da receita bruta'
+          '3-Regime Normal ')
+        ComboBoxLabel.Width = 84
+        ComboBoxLabel.Height = 13
+        ComboBoxLabel.Caption = 'Regime Tribut'#225'rio'
       end
     end
     object TabSheet1: TTabSheet

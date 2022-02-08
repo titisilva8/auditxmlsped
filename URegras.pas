@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB, Vcl.WinXCtrls, Vcl.Grids, Vcl.DBGrids,
   JvExDBGrids, JvDBGrid, JvDBUltimGrid,Vcl.FileCtrl, ACBrSpedFiscal, ACBrBase,
   ACBrDFe, ACBrNFe, ACBrEFDImportar,System.StrUtils,System.Rtti,pcnProcNFe,pcnNFe,
-  UDataModule,Datasnap.DBClient,URegrasController,URegra;
+  UDataModule,Datasnap.DBClient,URegrasController,URegra,pcnConversao;
 
 type
   TForm1 = class(TForm)
@@ -60,6 +60,7 @@ type
     LabeledComboBox5: TLabeledComboBox;
     Button3: TButton;
     DBGrid1: TDBGrid;
+    ComboboxRegimeTributario: TLabeledComboBox;
     procedure SearchBox2InvokeSearch(Sender: TObject);
     procedure EditPathSpedFiscalInvokeSearch(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -98,6 +99,7 @@ begin
   RegraValidacao.TabelaSped:=EditTabelaSped.Text;
   RegraValidacao.CampoSped:=EditCampoSped.Text;
   RegraValidacao.ValorSperadoSped:=EditValorEsperadoSped.Text;
+  RegraValidacao.Crt:= Copy(ComboboxRegimeTributario.Text,1,1);
   RegraValidacao.Historico:=EditHistorico.Text;
 end;
 
@@ -130,23 +132,31 @@ begin
 
   for IndiceArqXml := 0 to OpenDialog.Files.Count-1 do
   begin
+    //Carrega o Arquivo xml
     TRegrasController.CarregaArquivoXml(OpenDialog.Files[IndiceArqXml]);
 
+    //Faz um locate no registro sped fiscal para verificar se o arquivo xml está lançado no sped
     IndiceTabelaMestreSped:=TRegrasController.GetIndiceTabelaSped(EditTabelaSped.Text,
     TRegrasController.GetValorPesquisaParaEncontrarIndice(EditTabelaSped.Text));
 
+    //Registra advertências caso nota fiscal não seja encontrada
     if IndiceTabelaMestreSped = false then
     TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
     DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,'','','','Nota Fiscal não encontrada em arquivo Sped Fiscal')
 
+
     else
     begin
       ObjetoListaXmlSpedFiscal:=TRegrasController.VerificaQuantidadeItensXmltoSped(EditTagXml.Text,EditTabelaSped.Text,IndiceTabelaMestreSped);
+      // Verifica se a quantidade de itens lançados no xml é igual do sped
       if ObjetoListaXmlSpedFiscal.QuantidadeItensEntreListasIguais then
       begin
         for IndiceQuantItens := 0 to ObjetoListaXmlSpedFiscal.QuatidadeListaXml-1 do
+        // Executa a regra
         TRegrasController.VerificaDivergencias_Xml_X_Sped(RegraValidacao,IndiceTabelaMestreSped,IndiceQuantItens);
       end;
+
+
     end;
 
   end;

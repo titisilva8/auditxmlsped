@@ -34,6 +34,7 @@ implementation
 
 { TRegrasController }
 
+
 class function TRegrasController.CarregaArquivoXml(PathArquivoXml: String): boolean;
 begin
   Result:=true;
@@ -153,24 +154,29 @@ end;}
 class procedure TRegrasController.VerificaDivergencias_Xml_X_Sped(Regra:TRegra;IndiceMestreSped,IndiceDetalheDetalheSped_Xml:Integer);
 var ValorCampoXmlRetornado,ValorCampoSpedRetornado:Variant;
 begin
-  ValorCampoXmlRetornado:=GetValorField(Regra.TagXml,Regra.CampoXml,IndiceDetalheDetalheSped_Xml);
-  if Regra.CondicaoCampoXml<>'' then
-  if VarToStr(ValorCampoXmlRetornado) = Regra.CondicaoCampoXml then
-  begin
-    ValorCampoSpedRetornado:=GetValorFieldSped(Regra.TabelaSped,Regra.CampoSped,IndiceMestreSped,IndiceDetalheDetalheSped_Xml);
-    if Regra.ValorSperadoSped <> VarToStr(ValorCampoSpedRetornado) then
-    RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
-    DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,VarToStr(ValorCampoXmlRetornado),
-    VarToStr(Regra.ValorSperadoSped),VarToStr(ValorCampoSpedRetornado),Regra.Historico);
-  end;
+  // Se arquivo selecionado for igual a regra
+  if (Regra.Crt = '') or (Regra.Crt =  CRTToStr(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Emit.CRT) ) then
 
-  if Regra.CondicaoCampoXml = '' then
   begin
-    ValorCampoSpedRetornado:=GetValorFieldSped(Regra.TabelaSped,Regra.CampoSped,IndiceMestreSped,IndiceDetalheDetalheSped_Xml);
-    if ValorCampoXmlRetornado <> ValorCampoSpedRetornado then
-    TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
-    DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,VarToStr(ValorCampoXmlRetornado),
-    VarToStr(ValorCampoXmlRetornado),VarToStr(ValorCampoSpedRetornado),Regra.Historico);
+    ValorCampoXmlRetornado:=GetValorField(Regra.TagXml,Regra.CampoXml,IndiceDetalheDetalheSped_Xml);
+    if Regra.CondicaoCampoXml<>'' then
+    if VarToStr(ValorCampoXmlRetornado) = Regra.CondicaoCampoXml then
+    begin
+      ValorCampoSpedRetornado:=GetValorFieldSped(Regra.TabelaSped,Regra.CampoSped,IndiceMestreSped,IndiceDetalheDetalheSped_Xml);
+      if Regra.ValorSperadoSped <> VarToStr(ValorCampoSpedRetornado) then
+      RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+      DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,VarToStr(ValorCampoXmlRetornado),
+      VarToStr(Regra.ValorSperadoSped),VarToStr(ValorCampoSpedRetornado),Regra.Historico);
+    end;
+
+    if Regra.CondicaoCampoXml = '' then
+    begin
+      ValorCampoSpedRetornado:=GetValorFieldSped(Regra.TabelaSped,Regra.CampoSped,IndiceMestreSped,IndiceDetalheDetalheSped_Xml);
+      if ValorCampoXmlRetornado <> ValorCampoSpedRetornado then
+      TRegrasController.RegistraErrosAdvertencias(DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Ide.nNF.ToString,
+      DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe,VarToStr(ValorCampoXmlRetornado),
+      VarToStr(ValorCampoXmlRetornado),VarToStr(ValorCampoSpedRetornado),Regra.Historico);
+    end;
   end;
 end;
 
@@ -253,6 +259,9 @@ begin
 
     if pTag = 'prod' then
     Objeto:= DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[IndiceFilho].Prod;
+
+    if pTag = 'ICMSSN101' then
+    Objeto:= DataModuleRegras.AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[IndiceFilho].Imposto.ICMS;
 
     TipoTag:= Contexto.GetType(Objeto.ClassInfo);
     PropriedadeTag := TipoTag.GetProperty(pNomeField);

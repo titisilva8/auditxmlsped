@@ -2,6 +2,8 @@ unit URegra;
 
 interface
 
+uses pcnConversao;
+
 type TRegra = class
   private
     FTAG_XML:String;
@@ -11,9 +13,8 @@ type TRegra = class
     FTABELA_SPED:String;
     FCAMPO_SPED:String;
     FVALOR_ESPERADO_SPED:String;
-
+    FCRT: String;
     FHISTORICO:String;
-
 
 
   protected
@@ -26,11 +27,16 @@ type TRegra = class
     property TabelaSped:String read FTABELA_SPED write FTABELA_SPED;
     property CampoSped:String read FCAMPO_SPED write FCAMPO_SPED;
     property ValorSperadoSped:String read FVALOR_ESPERADO_SPED write FVALOR_ESPERADO_SPED;
-
+    property Crt: String read FCRT write FCRT;
     property Historico:String read FHISTORICO write FHISTORICO;
 
 end;
 
 implementation
+
+
+
+{ TRegra }
+
 
 end.
