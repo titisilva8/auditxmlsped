@@ -127,7 +127,7 @@ object Form1: TForm1
         Left = 24
         Top = 288
         Width = 551
-        Height = 22
+        Height = 21
         EditLabel.Width = 41
         EditLabel.Height = 13
         EditLabel.Caption = 'Hist'#243'rico'
@@ -196,7 +196,7 @@ object Form1: TForm1
         ComboBoxLabel.Caption = 'Tipo Regra'
       end
       object Button3: TButton
-        Left = 341
+        Left = 331
         Top = 320
         Width = 244
         Height = 25
@@ -224,13 +224,12 @@ object Form1: TForm1
         Width = 551
         Height = 21
         Style = csDropDownList
-        ItemIndex = 0
         TabOrder = 15
-        Text = '1-Simples Nacional'
         Items.Strings = (
-          '1-Simples Nacional'
-          '2-Simples Nacional - excesso de sublimite da receita bruta'
-          '3-Regime Normal ')
+          '0 - Todos'
+          '1 - Simples Nacional'
+          '2 - Simples Nacional - excesso de sublimite da receita bruta'
+          '3 - Regime Normal ')
         ComboBoxLabel.Width = 84
         ComboBoxLabel.Height = 13
         ComboBoxLabel.Caption = 'Regime Tribut'#225'rio'
