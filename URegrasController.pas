@@ -730,7 +730,7 @@ class procedure TRegrasController.VerificaDivergencias_Xml_X_Sped(Regra:TRegra;I
 var ValorCampoXmlRetornado:Variant;
 begin
   ValorCampoXmlRetornado:=GetValorFieldXml(Regra.TagXml,Regra.CampoXml,IndiceDetalheDetalheSped_Xml);
-  if (Regra.TipoRegraXML = 'Sem Condição') or (Regra.TipoRegraXML = '') then
+  if (Regra.IdentificadorCondicaoXml = 'Sem Condição') or (Regra.IdentificadorCondicaoXml = '') then
   AplicaRegraSemCondicao(Regra,IndiceMestreSped,IndiceDetalheDetalheSped_Xml,ValorCampoXmlRetornado)
   else
   AplicaRegraComCondicao(Regra,IndiceMestreSped,IndiceDetalheDetalheSped_Xml,ValorCampoXmlRetornado);

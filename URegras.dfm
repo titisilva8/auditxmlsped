@@ -43,9 +43,6 @@ object FAuditoriaXmlSpedFiscal: TFAuditoriaXmlSpedFiscal
       Width = 745
       Height = 21
       TabOrder = 0
-      Text = 
-        'D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-00104' +
-        '17880006-Remessa de arquivo original-dez2021 - Reti.txt'
       OnInvokeSearch = EditPathSpedFiscalInvokeSearch
     end
     object EditPathArquivosXml: TSearchBox
@@ -54,9 +51,6 @@ object FAuditoriaXmlSpedFiscal: TFAuditoriaXmlSpedFiscal
       Width = 745
       Height = 21
       TabOrder = 1
-      Text = 
-        'D:\Arquivos Black Slate\Arquivos Xml 12-2021\3121120065022300010' +
-        '2558030000012401790999281.xml'
       OnInvokeSearch = EditPathArquivosXmlInvokeSearch
     end
   end

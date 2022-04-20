@@ -4,7 +4,7 @@ interface
 
 uses pcnConversao;
 
-Tipotype TRegra = class
+  type TRegra = class
   private
     FTAG_XML:String;
     FCAMPO_XML:String;

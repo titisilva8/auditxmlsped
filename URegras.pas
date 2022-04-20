@@ -319,8 +319,8 @@ begin
   EditPathSpedFiscal.Clear;
   EditPathArquivosXml.Clear;
   EditPathSpedFiscal.Clear;
-  EditPathSpedFiscal.Text:='D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-0010417880006-Remessa de arquivo original-dez2021 - Reti.txt';
-  EditPathArquivosXml.Text:='D:\Arquivos Black Slate\Arquivos Xml 12-2021\31211223469125000160550010000771871009906148.xml';
+  //EditPathSpedFiscal.Text:='D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-0010417880006-Remessa de arquivo original-dez2021 - Reti.txt';
+  //EditPathArquivosXml.Text:='D:\Arquivos Black Slate\Arquivos Xml 12-2021\31211223469125000160550010000771871009906148.xml';
   EditHistorico.Text:='';
   EditTagXml.Text:='prod';
   EditTabelaSped.Text:='C170|0200';
