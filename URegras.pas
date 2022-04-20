@@ -8,79 +8,70 @@ uses
   Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB, Vcl.WinXCtrls, Vcl.Grids, Vcl.DBGrids,
   JvExDBGrids, JvDBGrid, JvDBUltimGrid,Vcl.FileCtrl, ACBrSpedFiscal, ACBrBase,
   ACBrDFe, ACBrNFe, ACBrEFDImportar,System.StrUtils,System.Rtti,pcnProcNFe,pcnNFe,
-  UDataModule,Datasnap.DBClient,URegrasController,URegra,pcnConversao;
+  UDataModule,Datasnap.DBClient,URegrasController,URegra,pcnConversao,
+  JvExStdCtrls, JvCombobox, JvDBSearchComboBox, Vcl.Buttons;
 
 type
-  TForm1 = class(TForm)
-    PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    TabSheet3: TTabSheet;
-    TabSheet4: TTabSheet;
-    produtosmercadorias: TTabSheet;
-    TabSheet6: TTabSheet;
-    TabSheet7: TTabSheet;
-    LabeledEdit1: TLabeledEdit;
-    LabeledMemo1: TLabeledMemo;
-    CheckBox1: TCheckBox;
-    CheckBox2: TCheckBox;
-    CheckBox3: TCheckBox;
-    LabeledComboBox1: TLabeledComboBox;
-    JvDBUltimGrid1: TJvDBUltimGrid;
-    JvDBUltimGrid2: TJvDBUltimGrid;
-    JvDBUltimGrid3: TJvDBUltimGrid;
-    JvDBUltimGrid4: TJvDBUltimGrid;
-    JvDBUltimGrid5: TJvDBUltimGrid;
-    LabeledComboBox2: TLabeledComboBox;
-    EditTagXml1: TLabeledEdit;
-    EditValorTagXml: TLabeledEdit;
-    LabeledEdit4: TLabeledEdit;
-    LabeledComboBox3: TLabeledComboBox;
-    LabeledEdit5: TLabeledEdit;
-    LabeledEdit6: TLabeledEdit;
-    EditCampoXml1: TLabeledEdit;
-    LabeledEdit8: TLabeledEdit;
-    EdtiTabelaSped: TTabSheet;
-    OpenDialog1: TOpenDialog;
-    EditPathSpedFiscal: TSearchBox;
-    Label1: TLabel;
+  TFAuditoriaXmlSpedFiscal = class(TForm)
+    GroupBox1: TGroupBox;
     Label2: TLabel;
-    SearchBox2: TSearchBox;
-    OpenDialog2: TOpenDialog;
-    Button1: TButton;
-    EditCampoXml: TLabeledEdit;
-    EditTagXml: TLabeledEdit;
-    EditTabelaSped: TLabeledEdit;
-    EditCampoSped: TLabeledEdit;
-    Button2: TButton;
-    EditHistorico: TLabeledEdit;
-    LabeledComboBox4: TLabeledComboBox;
-    EditValorEsperadoSped: TLabeledEdit;
-    EditValorXml: TLabeledEdit;
-    LabeledComboBox5: TLabeledComboBox;
-    Button3: TButton;
-    DBGrid1: TDBGrid;
+    Label1: TLabel;
+    EditPathSpedFiscal: TSearchBox;
+    EditPathArquivosXml: TSearchBox;
+    GroupBox2: TGroupBox;
     ComboboxRegimeTributario: TLabeledComboBox;
-    procedure SearchBox2InvokeSearch(Sender: TObject);
+    EditHistorico: TLabeledEdit;
+    GroupBox3: TGroupBox;
+    BotaoCruzaDados: TButton;
+    GridAdvertencias: TDBGrid;
+    GroupBox4: TGroupBox;
+    EditTagXml: TJvDBSearchComboBox;
+    Label3: TLabel;
+    EditCampoXml: TLabeledEdit;
+    Label6: TLabel;
+    ComboboxIdentificadorCondicaoXml: TLabeledComboBox;
+    EditValorXml: TLabeledEdit;
+    GroupBox5: TGroupBox;
+    EditTabelaSped: TJvDBSearchComboBox;
+    Label5: TLabel;
+    EditCampoSped: TLabeledEdit;
+    ComboboxIdentificadorCondicaoSped: TLabeledComboBox;
+    EditValorEsperadoSped: TLabeledEdit;
+    Label4: TLabel;
+    procedure EditPathArquivosXmlInvokeSearch(Sender: TObject);
     procedure EditPathSpedFiscalInvokeSearch(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
+    procedure BotaoCruzaDadosClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure GridAdvertenciasTitleClick(Column: TColumn);
+    procedure GridAdvertenciasDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridAdvertenciasCellClick(Column: TColumn);
+    procedure ComboboxIdentificadorCondicaoXmlChange(Sender: TObject);
+    procedure ComboboxIdentificadorCondicaoSpedChange(Sender: TObject);
   private
     { Private declarations }
+    function OrdenarGrid_PintaTitulo(xGrid: TDBGrid; Column: TColumn; Cds: TClientDataSet): boolean;
+    procedure DesenhaCheckBoxGridPadrao(Cds:TClientDataSet;Field,CheckTrue:String;Grid:TDBGrid;Column: TColumn;const Rect: TRect);
+
+    procedure AjustaDadosIniciais;
+    procedure AjustaVisibilidadeCamposCondicaoXml;
+    procedure AjustaVisibilidadeCamposCondicaoSpedFiscal;
+    procedure CruzarInformacoes;
+    procedure LoadArquivosXMl;
+    procedure LoadSpedFiscal;
+    procedure SetRegraValidacao;
+
   public
     { Public declarations }
-    var OpenDialog:TOpenDialog;
+    var OpenDialogArquivosXml:TOpenDialog;
     var NomeClasseController: String;
-    procedure PathClick(Sender: TObject);
-    procedure ExecutarMetodo(pNomeClasseController, pNomeMetodo: String; pParametros:array of TValue; pMetodoRest: String; pTipoRetorno: String);
     var RegraValidacao:TRegra;
-    procedure SetRegraValidacao;
+
+
   end;
 
 var
-  Form1: TForm1;
+  FAuditoriaXmlSpedFiscal: TFAuditoriaXmlSpedFiscal;
 
 implementation
 
@@ -90,15 +81,201 @@ SELDIRHELP = 1000;
 
 {$R *.dfm}
 
-procedure TForm1.SetRegraValidacao;
+{$Region 'Infra'}
+
+procedure TFAuditoriaXmlSpedFiscal.DesenhaCheckBoxGridPadrao(Cds:TClientDataSet;Field,CheckTrue:String;Grid:TDBGrid;Column: TColumn;const Rect: TRect);
+var
+  iCheck: Integer;
+  rRect: TRect;
+begin
+  //Desenha um checkbox no dbgrid
+  if Column.FieldName = Field then
+  begin
+    Grid.Canvas.FillRect(Rect);
+    iCheck := 0;
+    if CDS.FieldByName(Field).AsString = CheckTrue then
+      iCheck := DFCS_CHECKED
+    else
+      iCheck := 0;
+    rRect := Rect;
+    InflateRect(rRect,-2,-2);
+    DrawFrameControl(Grid.Canvas.Handle,rRect,DFC_BUTTON, DFCS_BUTTONCHECK or iCheck);
+  end;
+end;
+
+function TFAuditoriaXmlSpedFiscal.OrdenarGrid_PintaTitulo(xGrid: TDBGrid; Column: TColumn; Cds: TClientDataSet): boolean;
+const
+idxdefault='DEFAULT_ORDER';
+var
+  strColumn: string;
+  bolUsed: Boolean;
+  idOptions: TIndexOptions;
+  I: Integer;
+  VDescendField: string;
+begin
+  Result := false;
+  if not CDS.Active then exit;
+  strColumn := idxDefault;
+  // Se for campo calculado não deve fazer nada
+  if (Column.Field.FieldKind = fkCalculated) then exit;
+  // O índice já está em uso
+  bolUsed := (Column.Field.FieldName = cds.IndexName);
+  // Verifica a existência do índice e propriedades
+  CDS.IndexDefs.Update;
+  idOptions := [];
+  for I := 0 to CDS.IndexDefs.Count - 1 do
+  begin
+    if cds.IndexDefs.Items[I].Name = Column.Field.FieldName then
+    begin
+      strColumn := Column.Field.FieldName;
+      // Determina como deve ser criado o índice, inverte a condição ixDescending
+      case (ixDescending in cds.IndexDefs.Items[I].Options) of
+      True: begin
+              idOptions := [];
+              VDescendField := '';
+            end;
+      False:begin
+              idOptions := [ixDescending];
+              vDescendField := strColumn;
+            end;
+      end;
+    end;
+  end;
+  // Se não encontrou o índice, ou o índice já esta em uso...
+  if (strColumn = idxDefault) or bolUsed then
+  begin
+    if bolUsed then
+      CDS.DeleteIndex(Column.Field.FieldName);
+    try
+      CDS.AddIndex(Column.Field.FieldName, Column.Field.FieldName, idOptions, VDescendField, '', 0);
+      strColumn := Column.Field.FieldName;
+    except
+        // O índice esta indeterminado, passo para o padrão
+      if bolUsed then strColumn := idxDefault;
+    end;
+  end;
+  for I := 0 to xGRID.Columns.Count - 1 do begin
+    if Pos(StrColumn, xGrid.Columns[I].Field.FieldName) <> 0 then
+      xGrid.Columns[I].Title.Font.Color := clBlue
+    else
+      xGrid.Columns[I].Title.Font.Color := clWindowText;
+  end;
+  try
+    CDS.IndexName := strColumn;
+  except
+    CDS.IndexName := idxDefault;
+  end;
+  result := true;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.AjustaVisibilidadeCamposCondicaoXml;
+begin
+  if (ComboboxIdentificadorCondicaoXml.Text = 'Sem Condição') or (ComboboxIdentificadorCondicaoXml.Text = '') then
+  begin
+    EditValorXml.Visible:=false;
+    ComboboxIdentificadorCondicaoXml.Width:=345;
+  end
+  else
+  begin
+    EditValorXml.Visible:=true;
+    ComboboxIdentificadorCondicaoXml.Width:=188;
+  end;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.AjustaVisibilidadeCamposCondicaoSpedFiscal;
+begin
+  if (ComboboxIdentificadorCondicaoSped.Text = 'Sem Condição') or  (ComboboxIdentificadorCondicaoSped.Text = '') then
+  begin
+    EditValorEsperadoSped.Visible:=false;
+    ComboboxIdentificadorCondicaoSped.Width:=345;
+  end
+  else
+  begin
+    EditValorEsperadoSped.Visible:=true;
+    ComboboxIdentificadorCondicaoSped.Width:=188;
+  end;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.FormCreate(Sender: TObject);
+begin
+  TRegrasController.PreencheCdsTabelasSped;
+  TRegrasController.PreencheCdsTagXml;
+  AjustaDadosIniciais;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.GridAdvertenciasCellClick(Column: TColumn);
+begin
+  if Column.Index = 11 then
+  begin
+    DataModuleRegras.CDSRelErrosAdvertencias.Edit;
+    if DataModuleRegras.CDSRelErrosAdvertencias.FieldByName('IDENTIFICADOR_ERRO_ADVERTENCIA').AsString = '' then
+    DataModuleRegras.CDSRelErrosAdvertencias.FieldByName('IDENTIFICADOR_ERRO_ADVERTENCIA').AsString := 'S'
+    else
+    DataModuleRegras.CDSRelErrosAdvertencias.FieldByName('IDENTIFICADOR_ERRO_ADVERTENCIA').AsString := '';
+    DataModuleRegras.CDSRelErrosAdvertencias.Post;
+  end;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.GridAdvertenciasDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  DesenhaCheckBoxGridPadrao(DataModuleRegras.CdsRelErrosAdvertencias,'IDENTIFICADOR_ERRO_ADVERTENCIA','S',GridAdvertencias,Column,Rect);
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.GridAdvertenciasTitleClick(Column: TColumn);
+begin
+  OrdenarGrid_PintaTitulo(GridAdvertencias, Column,DataModuleRegras.CdsRelErrosAdvertencias);
+end;
+
+{$EndRegion}
+
+{$Region 'Botões'}
+
+procedure TFAuditoriaXmlSpedFiscal.BotaoCruzaDadosClick(Sender: TObject);
+begin
+  CruzarInformacoes;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.ComboboxIdentificadorCondicaoSpedChange(Sender: TObject);
+begin
+  AjustaVisibilidadeCamposCondicaoSpedFiscal;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.ComboboxIdentificadorCondicaoXmlChange(Sender: TObject);
+begin
+  AjustaVisibilidadeCamposCondicaoXml;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.EditPathArquivosXmlInvokeSearch(Sender: TObject);
+begin
+  LoadArquivosXml;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.EditPathSpedFiscalInvokeSearch(Sender: TObject);
+begin
+  LoadSpedFiscal;
+end;
+
+{$EndRegion}
+
+{$Region 'Functions e Procedures'}
+
+procedure TFAuditoriaXmlSpedFiscal.LoadSpedFiscal;
+begin
+  if DataModuleRegras.OpenDialogSped.Execute() then
+  EditPathSpedFiscal.Text:=DataModuleRegras.OpenDialogSped.FileName;
+end;
+
+procedure TFAuditoriaXmlSpedFiscal.SetRegraValidacao;
 begin
   try
     RegraValidacao:=TRegra.Create;
     RegraValidacao.TagXml:=EditTagXml.Text;
     RegraValidacao.CampoXml:=EditCampoXml.Text;
+    RegraValidacao.IdentificadorCondicaoXml:=ComboboxIdentificadorCondicaoXml.Text;
     RegraValidacao.CondicaoCampoXml:=EditValorXml.Text;
     RegraValidacao.TabelaSped:=EditTabelaSped.Text;
     RegraValidacao.CampoSped:=EditCampoSped.Text;
+    RegraValidacao.IdentificadorCondicaoSped:=ComboboxIdentificadorCondicaoSped.Text;
     RegraValidacao.ValorSperadoSped:=EditValorEsperadoSped.Text;
     RegraValidacao.Crt:= Copy(ComboboxRegimeTributario.Text,1,1);
     RegraValidacao.Historico:=EditHistorico.Text;
@@ -110,128 +287,72 @@ begin
   end;
 end;
 
-
-procedure TForm1.Button2Click(Sender: TObject);
-var I:Integer;
-quantidadeitensnf:integer;
-teste:String;
-begin
-  DataModuleRegras.AcbrNfe.NotasFiscais.Clear;
-  DataModuleRegras.AcbrNfe.NotasFiscais.LoadFromFile(SearchBox2.Text);
-
-  DataModuleRegras.AcbrSpedFiscal.Arquivo:=EditPathSpedFiscal.Text;
-  DataModuleRegras.AcbrSpedFiscal.Importar;
-
-  Teste:=TRegrasController.GetValorFieldSped(EditTabelaSped.Text,EditCampoSped.Text,0,0);
-  Showmessage(Teste);
-end;
-
-
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TFAuditoriaXmlSpedFiscal.CruzarInformacoes;
 begin
   try
-    SetRegraValidacao;
-    TRegrasController.LimpaCdsAdvertencias;
-    TRegrasController.ImportaSpedFiscal(EditPathSpedFiscal.Text);
-    TRegrasController.CruzaDadosNfeXml_x_NfeSpedFiscal(RegraValidacao,OpenDialog);
+    try
+      SetRegraValidacao;
+      TRegrasController.LimpaCdsAdvertencias;
+      TRegrasController.LoadSpedFiscal(EditPathSpedFiscal.Text);
+      TRegrasController.VerificaCarregamentoArquivosXml(OpenDialogArquivosXml);
+      TRegrasController.CruzaDadosNfeXml_x_NfeSpedFiscal(RegraValidacao,OpenDialogArquivosXml);
+      Except on E:Exception do
+      Showmessage('Parâmetros da regra não puderam ser auditados');
+    end;
   finally
     Freeandnil(RegraValidacao);
   end;
 end;
 
-procedure TForm1.ExecutarMetodo(pNomeClasseController, pNomeMetodo: String; pParametros:
-array of TValue; pMetodoRest: String; pTipoRetorno: String);
-var
-  Contexto: TRttiContext;
-  RttiInstanceType: TRttiInstanceType;
-  i: Integer;
-begin
-  try
-    FormatSettings.DecimalSeparator := '.';
-    try
-    NomeClasseController := pNomeClasseController;
-    RttiInstanceType := Contexto.FindType(pNomeClasseController) as TRttiInstanceType;
-    RttiInstanceType.GetMethod(pNomeMetodo).Invoke(RttiInstanceType.MetaclassType, pParametros);
-    except
-      on E: Exception do
-        Application.MessageBox(PChar('Ocorreu um erro durante a execução do método. Informe a mensagem ao Administrador do sistema.' + #13 + #13 + E.Message), 'Erro do sistema', MB_OK + MB_ICONERROR);
-    end;
-  finally
-    FormatSettings.DecimalSeparator := ',';
-    Contexto.Free;
-  end;
-end;
-
-
-
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-  DataModuleRegras.CdsRelErrosAdvertencias.CreateDataSet;
-end;
-
-procedure TForm1.EditPathSpedFiscalInvokeSearch(Sender: TObject);
-begin
-  if OpenDialog1.Execute() then
-  EditPathSpedFiscal.Text:=OpenDialog1.FileName;
-end;
-
-procedure TForm1.SearchBox2InvokeSearch(Sender: TObject);
+procedure TFAuditoriaXmlSpedFiscal.LoadArquivosXMl;
 var I:Integer;
 begin
-  //PathClick(Sender);
-  OpenDialog:=TOpenDialog.Create(nil);
-  OpenDialog.Options:=[ofHideReadOnly,ofAllowMultiSelect,ofEnableSizing];
-  Opendialog.Filter:='Arquivos Xml (*.xml)|*.xml|';
-  OpenDialog.Execute;
-  SearchBox2.Text:=OpenDialog.Files[0];
+  OpenDialogArquivosXml:=TOpenDialog.Create(nil);
+  OpenDialogArquivosXml.Options:=[ofHideReadOnly,ofAllowMultiSelect,ofEnableSizing];
+  OpenDialogArquivosXml.Filter:='Arquivos Xml (*.xml)|*.xml|';
+  OpenDialogArquivosXml.Execute;
+  EditPathArquivosXml.Text:=OpenDialogArquivosXml.Files[0];
 end;
 
-
-procedure TForm1.Button1Click(Sender: TObject);
-var I:Integer;
-quantidadeitensnf:integer;
-teste:String;
+procedure TFAuditoriaXmlSpedFiscal.AjustaDadosIniciais;
 begin
-  DataModuleRegras.AcbrNfe.NotasFiscais.Clear;
-  DataModuleRegras.AcbrNfe.NotasFiscais.LoadFromFile(SearchBox2.Text);
+  EditPathSpedFiscal.Clear;
+  EditPathArquivosXml.Clear;
+  EditPathSpedFiscal.Clear;
+  EditPathSpedFiscal.Text:='D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-0010417880006-Remessa de arquivo original-dez2021 - Reti.txt';
+  EditPathArquivosXml.Text:='D:\Arquivos Black Slate\Arquivos Xml 12-2021\31211223469125000160550010000771871009906148.xml';
+  EditHistorico.Text:='';
+  EditTagXml.Text:='prod';
+  EditTabelaSped.Text:='C170|0200';
 
-  DataModuleRegras.AcbrSpedFiscal.Arquivo:=EditPathSpedFiscal.Text;
-  DataModuleRegras.AcbrSpedFiscal.Importar;
-  //VerificaTagIde;
+  EditCampoXml.Text:='NCM';
+  EditCampoSped.Text:='COD_NCM';
+  EditHistorico.Text:='Ncm do item no arquivo xml está diferente do ncm do mesmo item lançado no Sped Fiscal';
 
-  Teste:=TRegrasController.GetValorFieldXml(EditTagXml.Text,EditCampoXml.Text,0);
+  ComboboxRegimeTributario.ItemIndex:=0;
+  ComboboxIdentificadorCondicaoXml.ItemIndex:=0;
+  ComboboxIdentificadorCondicaoSped.ItemIndex:=0;
+  EditValorXml.Visible:=False;
+  EditValorEsperadoSped.Visible:=false;
 
-  //LowerCase()
-  Showmessage(Teste);
 
-  { for I := 0 to AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Count -1 do
-  begin
-    if AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[I].CHV_NFE = AcbrNfe.NotasFiscais.Items[0].NFe.procNFe.chNFe  then
+  GridAdvertencias.Columns[1].Font.Color:=clmaroon;
+  GridAdvertencias.Columns[1].Font.style:=[fsbold];
+  GridAdvertencias.Columns[3].Font.style:=[fsbold];
 
-    begin
-      AcbrNfe.NotasFiscais.Imprimir;
-      quantidadeItensNf:= AcbrSpedFiscal1.Bloco_C.RegistroC001.RegistroC100.Items[I].RegistroC170.Count;
-      Showmessage('Nota Fiscal Encontrada');
-    end;
 
-  end;}
+  GridAdvertencias.Columns[4].Font.Color:=clblue;
+  GridAdvertencias.Columns[5].Font.Color:=clgreen;
+  GridAdvertencias.Columns[6].Font.Color:=clred;
+
+  GridAdvertencias.Columns[7].Font.style:=[fsbold];
+
+  ComboboxIdentificadorCondicaoXml.Width:=345;
+  ComboboxIdentificadorCondicaoSped.Width:=345;
 
 
 end;
 
-procedure TForm1.PathClick(Sender: TObject);
-var
-  Dir: string;
-begin
-  if Length(TSearchBox(Sender).Text) <= 0 then
-     Dir := ExtractFileDir(application.ExeName)
-  else
-     Dir := TSearchBox(Sender).Text;
-
-  if SelectDirectory(Dir, [sdAllowCreate, sdPerformCreate, sdPrompt],SELDIRHELP) then
-    TSearchBox(Sender).Text := Dir+'\';
-end;
-
-
+{$EndRegion}
 
 end.

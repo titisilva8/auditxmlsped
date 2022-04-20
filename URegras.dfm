@@ -1,9 +1,9 @@
-object Form1: TForm1
+object FAuditoriaXmlSpedFiscal: TFAuditoriaXmlSpedFiscal
   Left = 0
   Top = 0
-  Caption = 'Form1'
-  ClientHeight = 605
-  ClientWidth = 937
+  Caption = 'Auditoria Xml NF-e/Sped Fiscal'
+  ClientHeight = 670
+  ClientWidth = 801
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,532 +11,308 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poMainFormCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object PageControl1: TPageControl
+  object GroupBox1: TGroupBox
     Left = 0
     Top = 0
-    Width = 937
-    Height = 605
-    ActivePage = EdtiTabelaSped
-    Align = alClient
+    Width = 801
+    Height = 121
+    Align = alTop
+    Caption = ' '
     TabOrder = 0
-    object EdtiTabelaSped: TTabSheet
-      Caption = 'Arquivos Eletronicos'
-      ImageIndex = 7
-      object Label1: TLabel
-        Left = 24
-        Top = 17
-        Width = 98
-        Height = 13
-        Caption = 'Arquivos Sped Fiscal'
+    object Label2: TLabel
+      Left = 24
+      Top = 63
+      Width = 61
+      Height = 13
+      Caption = 'Arquivos Xml'
+    end
+    object Label1: TLabel
+      Left = 24
+      Top = 17
+      Width = 98
+      Height = 13
+      Caption = 'Arquivos Sped Fiscal'
+    end
+    object EditPathSpedFiscal: TSearchBox
+      Left = 24
+      Top = 36
+      Width = 745
+      Height = 21
+      TabOrder = 0
+      Text = 
+        'D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-00104' +
+        '17880006-Remessa de arquivo original-dez2021 - Reti.txt'
+      OnInvokeSearch = EditPathSpedFiscalInvokeSearch
+    end
+    object EditPathArquivosXml: TSearchBox
+      Left = 24
+      Top = 82
+      Width = 745
+      Height = 21
+      TabOrder = 1
+      Text = 
+        'D:\Arquivos Black Slate\Arquivos Xml 12-2021\3121120065022300010' +
+        '2558030000012401790999281.xml'
+      OnInvokeSearch = EditPathArquivosXmlInvokeSearch
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 121
+    Width = 801
+    Height = 280
+    Align = alTop
+    Caption = ' '
+    TabOrder = 1
+    object ComboboxRegimeTributario: TLabeledComboBox
+      Left = 24
+      Top = 205
+      Width = 745
+      Height = 21
+      Style = csDropDownList
+      ItemIndex = 1
+      TabOrder = 0
+      Text = '1 - Simples Nacional'
+      Items.Strings = (
+        '0 - Todos'
+        '1 - Simples Nacional'
+        '2 - Simples Nacional - excesso de sublimite da receita bruta'
+        '3 - Regime Normal ')
+      ComboBoxLabel.Width = 84
+      ComboBoxLabel.Height = 13
+      ComboBoxLabel.Caption = 'Regime Tribut'#225'rio'
+    end
+    object EditHistorico: TLabeledEdit
+      Left = 24
+      Top = 248
+      Width = 745
+      Height = 21
+      EditLabel.Width = 41
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Hist'#243'rico'
+      TabOrder = 1
+      Text = 
+        'Icms Creditado em arquivos xml diverge de icms credito no arquiv' +
+        'o sped fiscal'
+    end
+    object GroupBox4: TGroupBox
+      Left = 2
+      Top = 15
+      Width = 797
+      Height = 81
+      Align = alTop
+      Caption = ' '
+      TabOrder = 2
+      object Label3: TLabel
+        Left = 2
+        Top = 15
+        Width = 793
+        Height = 16
+        Align = alTop
+        Caption = 
+          '                                                             Cam' +
+          'pos XML a serem auditados com Sped Fiscal'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlue
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitWidth = 553
       end
-      object Label2: TLabel
-        Left = 24
-        Top = 73
-        Width = 61
+      object Label6: TLabel
+        Left = 22
+        Top = 37
+        Width = 37
         Height = 13
-        Caption = 'Arquivos Xml'
+        Caption = 'Tag Xml'
       end
-      object EditPathSpedFiscal: TSearchBox
-        Left = 24
-        Top = 32
-        Width = 433
+      object EditTagXml: TJvDBSearchComboBox
+        Left = 22
+        Top = 54
+        Width = 222
         Height = 21
+        DataField = 'TAGXML'
+        DataSource = DataModuleRegras.DsTagXml
         TabOrder = 0
-        Text = 
-          'D:\Arquivos Black Slate\Sped Fiscal\SpedEFD-09026278000102-00104' +
-          '17880006-Remessa de arquivo original-dez2021 - Reti.txt'
-        OnInvokeSearch = EditPathSpedFiscalInvokeSearch
-      end
-      object SearchBox2: TSearchBox
-        Left = 24
-        Top = 92
-        Width = 433
-        Height = 21
-        TabOrder = 1
-        Text = 
-          'D:\Arquivos Black Slate\Arquivos Xml 12-2021\3121120065022300010' +
-          '2558030000012401790999281.xml'
-        OnInvokeSearch = SearchBox2InvokeSearch
-      end
-      object Button1: TButton
-        Left = 24
-        Top = 320
-        Width = 137
-        Height = 25
-        Caption = 'Cruzar dados Sped'
-        TabOrder = 2
-        OnClick = Button1Click
+        Text = 'ICMS'
       end
       object EditCampoXml: TLabeledEdit
-        Left = 183
-        Top = 154
-        Width = 128
+        Left = 247
+        Top = 54
+        Width = 169
         Height = 21
         EditLabel.Width = 52
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Xml'
-        TabOrder = 3
+        TabOrder = 1
         Text = 'vCredICMSSN'
       end
-      object EditTagXml: TLabeledEdit
-        Left = 24
-        Top = 154
-        Width = 153
+      object ComboboxIdentificadorCondicaoXml: TLabeledComboBox
+        Left = 422
+        Top = 54
+        Width = 188
         Height = 21
-        EditLabel.Width = 37
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Tag Xml'
-        TabOrder = 4
-        Text = 'ICMSSN101'
+        Style = csDropDownList
+        TabOrder = 2
+        OnChange = ComboboxIdentificadorCondicaoXmlChange
+        Items.Strings = (
+          'Sem Condi'#231#227'o'
+          'Igual a'
+          'Diferente de'
+          'Menor que'
+          'Maior que'
+          'Maior ou Igual a'
+          'Menor ou igual a')
+        ComboBoxLabel.Width = 102
+        ComboBoxLabel.Height = 13
+        ComboBoxLabel.Caption = 'Condi'#231#227'o Campo XML'
       end
-      object EditTabelaSped: TLabeledEdit
-        Left = 24
-        Top = 200
+      object EditValorXml: TLabeledEdit
+        Left = 616
+        Top = 54
         Width = 153
         Height = 21
-        EditLabel.Width = 59
+        EditLabel.Width = 24
         EditLabel.Height = 13
-        EditLabel.Caption = 'Tabela Sped'
-        TabOrder = 5
+        EditLabel.Caption = 'Valor'
+        TabOrder = 3
+        Visible = False
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 2
+      Top = 96
+      Width = 797
+      Height = 89
+      Align = alTop
+      Caption = ' '
+      TabOrder = 3
+      object Label5: TLabel
+        Left = 22
+        Top = 40
+        Width = 59
+        Height = 13
+        Caption = 'Tabela Sped'
+      end
+      object Label4: TLabel
+        Left = 2
+        Top = 15
+        Width = 793
+        Height = 16
+        Align = alTop
+        Caption = 
+          '                                                   Campos do Spe' +
+          'd Fiscal a serem auditados com arquivos XML'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGreen
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitWidth = 593
+      end
+      object EditTabelaSped: TJvDBSearchComboBox
+        Left = 22
+        Top = 59
+        Width = 222
+        Height = 21
+        DataField = 'TABELA_SPED'
+        DataSource = DataModuleRegras.DsTabelaSped
+        CharCase = ecUpperCase
+        TabOrder = 0
         Text = 'C170'
       end
       object EditCampoSped: TLabeledEdit
-        Left = 183
-        Top = 200
-        Width = 128
+        Left = 247
+        Top = 59
+        Width = 169
         Height = 21
         EditLabel.Width = 60
         EditLabel.Height = 13
         EditLabel.Caption = 'Campo Sped'
-        TabOrder = 6
+        TabOrder = 1
         Text = 'VL_ICMS'
       end
-      object Button2: TButton
-        Left = 183
-        Top = 320
-        Width = 137
-        Height = 25
-        Caption = 'Cruzar dados Sped'
-        TabOrder = 7
-        OnClick = Button2Click
-      end
-      object EditHistorico: TLabeledEdit
-        Left = 24
-        Top = 288
-        Width = 551
-        Height = 21
-        EditLabel.Width = 41
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Hist'#243'rico'
-        TabOrder = 8
-      end
-      object LabeledComboBox4: TLabeledComboBox
-        Left = 317
-        Top = 200
-        Width = 99
+      object ComboboxIdentificadorCondicaoSped: TLabeledComboBox
+        Left = 422
+        Top = 59
+        Width = 188
         Height = 21
         Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 9
-        Text = 'Igual a'
+        TabOrder = 2
+        OnChange = ComboboxIdentificadorCondicaoSpedChange
         Items.Strings = (
+          'Sem Condi'#231#227'o'
           'Igual a'
           'Diferente de'
           'Menor que'
-          'Maior  que'
+          'Maior que'
           'Maior ou Igual a'
           'Menor ou igual a'
           '')
-        ComboBoxLabel.Width = 52
+        ComboBoxLabel.Width = 107
         ComboBoxLabel.Height = 13
-        ComboBoxLabel.Caption = 'Tipo Regra'
+        ComboBoxLabel.Caption = 'Condi'#231#227'o Campo Sped'
       end
       object EditValorEsperadoSped: TLabeledEdit
-        Left = 422
-        Top = 200
-        Width = 153
+        Left = 616
+        Top = 59
+        Width = 151
         Height = 21
         EditLabel.Width = 24
         EditLabel.Height = 13
         EditLabel.Caption = 'Valor'
-        TabOrder = 10
-      end
-      object EditValorXml: TLabeledEdit
-        Left = 422
-        Top = 154
-        Width = 153
-        Height = 21
-        EditLabel.Width = 24
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Valor'
-        TabOrder = 11
-      end
-      object LabeledComboBox5: TLabeledComboBox
-        Left = 317
-        Top = 154
-        Width = 99
-        Height = 21
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 12
-        Text = 'Igual a'
-        Items.Strings = (
-          'Igual a'
-          'Diferente de'
-          'Menor que'
-          'Maior  que'
-          'Maior ou Igual a'
-          'Menor ou igual a'
-          '')
-        ComboBoxLabel.Width = 52
-        ComboBoxLabel.Height = 13
-        ComboBoxLabel.Caption = 'Tipo Regra'
-      end
-      object Button3: TButton
-        Left = 331
-        Top = 320
-        Width = 244
-        Height = 25
-        Caption = 'Cruzar Dados'
-        TabOrder = 13
-        OnClick = Button3Click
-      end
-      object DBGrid1: TDBGrid
-        Left = 0
-        Top = 376
-        Width = 929
-        Height = 201
-        Align = alBottom
-        DataSource = DataModuleRegras.DSRelErrosAdvertencias
-        TabOrder = 14
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-      end
-      object ComboboxRegimeTributario: TLabeledComboBox
-        Left = 24
-        Top = 242
-        Width = 551
-        Height = 21
-        Style = csDropDownList
-        TabOrder = 15
-        Items.Strings = (
-          '0 - Todos'
-          '1 - Simples Nacional'
-          '2 - Simples Nacional - excesso de sublimite da receita bruta'
-          '3 - Regime Normal ')
-        ComboBoxLabel.Width = 84
-        ComboBoxLabel.Height = 13
-        ComboBoxLabel.Caption = 'Regime Tribut'#225'rio'
-      end
-    end
-    object TabSheet1: TTabSheet
-      Caption = 'Parametros'
-      object LabeledEdit1: TLabeledEdit
-        Left = 16
-        Top = 24
-        Width = 433
-        Height = 21
-        EditLabel.Width = 26
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Titulo'
-        TabOrder = 0
-      end
-      object LabeledMemo1: TLabeledMemo
-        Left = 16
-        Top = 64
-        Width = 433
-        Height = 89
-        TabOrder = 1
-        MemoLabel.Width = 78
-        MemoLabel.Height = 13
-        MemoLabel.Caption = 'Descri'#231#227'o Regra'
-      end
-      object CheckBox1: TCheckBox
-        Left = 16
-        Top = 184
-        Width = 97
-        Height = 17
-        Caption = 'Entrada'
-        TabOrder = 2
-      end
-      object CheckBox2: TCheckBox
-        Left = 128
-        Top = 184
-        Width = 97
-        Height = 17
-        Caption = 'Saida'
         TabOrder = 3
-      end
-      object CheckBox3: TCheckBox
-        Left = 248
-        Top = 184
-        Width = 97
-        Height = 17
-        Caption = 'Ativa'
-        TabOrder = 4
-      end
-      object LabeledComboBox1: TLabeledComboBox
-        Left = 16
-        Top = 232
-        Width = 433
-        Height = 21
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 5
-        Text = '1 - Regra Sped Fiscal'
-        Items.Strings = (
-          '1 - Regra Sped Fiscal'
-          '2 - Regra NF-e Xml'
-          '3 - Regra para Cruzamento de Dados XML x Sped Fiscal')
-        ComboBoxLabel.Width = 52
-        ComboBoxLabel.Height = 13
-        ComboBoxLabel.Caption = 'Tipo Regra'
-      end
-    end
-    object TabSheet2: TTabSheet
-      Caption = 'Grupo de Participantes'
-      ImageIndex = 1
-      object JvDBUltimGrid1: TJvDBUltimGrid
-        Left = 0
-        Top = 0
-        Width = 929
-        Height = 577
-        Align = alClient
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-        SelectColumnsDialogStrings.Caption = 'Select columns'
-        SelectColumnsDialogStrings.OK = '&OK'
-        SelectColumnsDialogStrings.NoSelectionWarning = 'At least one column must be visible!'
-        EditControls = <>
-        RowsHeight = 17
-        TitleRowHeight = 17
-      end
-    end
-    object TabSheet3: TTabSheet
-      Caption = 'Participante Especifico'
-      ImageIndex = 2
-      object JvDBUltimGrid2: TJvDBUltimGrid
-        Left = 0
-        Top = 0
-        Width = 929
-        Height = 577
-        Align = alClient
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-        SelectColumnsDialogStrings.Caption = 'Select columns'
-        SelectColumnsDialogStrings.OK = '&OK'
-        SelectColumnsDialogStrings.NoSelectionWarning = 'At least one column must be visible!'
-        EditControls = <>
-        RowsHeight = 17
-        TitleRowHeight = 17
-      end
-    end
-    object TabSheet4: TTabSheet
-      Caption = 'Grupo de Produtos'
-      ImageIndex = 3
-      object JvDBUltimGrid3: TJvDBUltimGrid
-        Left = 0
-        Top = 0
-        Width = 929
-        Height = 577
-        Align = alClient
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-        SelectColumnsDialogStrings.Caption = 'Select columns'
-        SelectColumnsDialogStrings.OK = '&OK'
-        SelectColumnsDialogStrings.NoSelectionWarning = 'At least one column must be visible!'
-        EditControls = <>
-        RowsHeight = 17
-        TitleRowHeight = 17
-      end
-    end
-    object produtosmercadorias: TTabSheet
-      Caption = 'Produtos/Mercadorias Especificas'
-      ImageIndex = 4
-      object JvDBUltimGrid4: TJvDBUltimGrid
-        Left = 0
-        Top = 0
-        Width = 929
-        Height = 577
-        Align = alClient
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-        SelectColumnsDialogStrings.Caption = 'Select columns'
-        SelectColumnsDialogStrings.OK = '&OK'
-        SelectColumnsDialogStrings.NoSelectionWarning = 'At least one column must be visible!'
-        EditControls = <>
-        RowsHeight = 17
-        TitleRowHeight = 17
-      end
-    end
-    object TabSheet6: TTabSheet
-      Caption = 'NCM Especifico'
-      ImageIndex = 5
-      object JvDBUltimGrid5: TJvDBUltimGrid
-        Left = 0
-        Top = 0
-        Width = 929
-        Height = 577
-        Align = alClient
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-        SelectColumnsDialogStrings.Caption = 'Select columns'
-        SelectColumnsDialogStrings.OK = '&OK'
-        SelectColumnsDialogStrings.NoSelectionWarning = 'At least one column must be visible!'
-        EditControls = <>
-        RowsHeight = 17
-        TitleRowHeight = 17
-      end
-    end
-    object TabSheet7: TTabSheet
-      Caption = 'Campos para cruzamento'
-      ImageIndex = 6
-      object LabeledComboBox2: TLabeledComboBox
-        Left = 296
-        Top = 40
-        Width = 99
-        Height = 21
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 0
-        Text = 'Igual a'
-        Items.Strings = (
-          'Igual a'
-          'Diferente de'
-          'Menor que'
-          'Maior  que'
-          'Maior ou Igual a'
-          'Menor ou igual a'
-          '')
-        ComboBoxLabel.Width = 52
-        ComboBoxLabel.Height = 13
-        ComboBoxLabel.Caption = 'Tipo Regra'
-      end
-      object EditTagXml1: TLabeledEdit
-        Left = 3
-        Top = 40
-        Width = 153
-        Height = 21
-        EditLabel.Width = 37
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Tag Xml'
-        TabOrder = 1
-      end
-      object EditValorTagXml: TLabeledEdit
-        Left = 401
-        Top = 40
-        Width = 153
-        Height = 21
-        EditLabel.Width = 24
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Valor'
-        TabOrder = 2
-      end
-      object LabeledEdit4: TLabeledEdit
-        Left = 3
-        Top = 88
-        Width = 153
-        Height = 21
-        EditLabel.Width = 59
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Tabela Sped'
-        TabOrder = 3
-      end
-      object LabeledComboBox3: TLabeledComboBox
-        Left = 296
-        Top = 88
-        Width = 99
-        Height = 21
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 4
-        Text = 'Igual a'
-        Items.Strings = (
-          'Igual a'
-          'Diferente de'
-          'Menor que'
-          'Maior  que'
-          'Maior ou Igual a'
-          'Menor ou igual a'
-          '')
-        ComboBoxLabel.Width = 52
-        ComboBoxLabel.Height = 13
-        ComboBoxLabel.Caption = 'Tipo Regra'
-      end
-      object LabeledEdit5: TLabeledEdit
-        Left = 401
-        Top = 88
-        Width = 153
-        Height = 21
-        EditLabel.Width = 24
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Valor'
-        TabOrder = 5
-      end
-      object LabeledEdit6: TLabeledEdit
-        Left = 3
-        Top = 136
-        Width = 551
-        Height = 21
-        EditLabel.Width = 41
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Hist'#243'rico'
-        TabOrder = 6
-      end
-      object EditCampoXml1: TLabeledEdit
-        Left = 162
-        Top = 40
-        Width = 128
-        Height = 21
-        EditLabel.Width = 52
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Campo Xml'
-        TabOrder = 7
-      end
-      object LabeledEdit8: TLabeledEdit
-        Left = 162
-        Top = 88
-        Width = 128
-        Height = 21
-        EditLabel.Width = 60
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Campo Sped'
-        TabOrder = 8
+        Visible = False
       end
     end
   end
-  object OpenDialog1: TOpenDialog
-    Left = 516
-    Top = 48
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 401
+    Width = 801
+    Height = 66
+    Align = alTop
+    Caption = ' '
+    TabOrder = 2
+    object BotaoCruzaDados: TButton
+      Left = 24
+      Top = 23
+      Width = 745
+      Height = 25
+      Caption = 'Auditar Regra Acima'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      OnClick = BotaoCruzaDadosClick
+    end
   end
-  object OpenDialog2: TOpenDialog
-    Left = 524
-    Top = 128
+  object GridAdvertencias: TDBGrid
+    Left = 0
+    Top = 467
+    Width = 801
+    Height = 203
+    Align = alClient
+    DataSource = DataModuleRegras.DSRelErrosAdvertencias
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    ReadOnly = True
+    TabOrder = 3
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnCellClick = GridAdvertenciasCellClick
+    OnDrawColumnCell = GridAdvertenciasDrawColumnCell
+    OnTitleClick = GridAdvertenciasTitleClick
   end
 end

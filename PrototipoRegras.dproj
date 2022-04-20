@@ -101,7 +101,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="URegras.pas">
-            <Form>Form1</Form>
+            <Form>FAuditoriaXmlSpedFiscal</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UDataModule.pas">

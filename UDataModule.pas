@@ -4,13 +4,12 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient, ACBrDFe, ACBrNFe,
-  ACBrEFDImportar, ACBrBase, ACBrSpedFiscal;
+  ACBrEFDImportar, ACBrBase, ACBrSpedFiscal, Vcl.Dialogs;
 
 type
   TDataModuleRegras = class(TDataModule)
     DSRelErrosAdvertencias: TDataSource;
     CdsRelErrosAdvertencias: TClientDataSet;
-    CdsRelErrosAdvertenciasID: TIntegerField;
     CdsRelErrosAdvertenciasNUMERO_DOCUMENTO: TStringField;
     CdsRelErrosAdvertenciasCHAVE_ACESSO: TStringField;
     CdsRelErrosAdvertenciasHISTORICO: TStringField;
@@ -21,6 +20,20 @@ type
     ACBrSPEDFiscal1: TACBrSPEDFiscal;
     ACBrSpedFiscal: TACBrSpedFiscalImportar;
     ACBrNFe: TACBrNFe;
+    CdsTabelaSped: TClientDataSet;
+    DsTabelaSped: TDataSource;
+    CdsTabelaSpedTABELA_SPED: TStringField;
+    CdsTabelaSpedNIVEL: TIntegerField;
+    CdsTagXml: TClientDataSet;
+    DsTagXml: TDataSource;
+    CdsTagXmlTAGXML: TStringField;
+    CdsTagXmlNIVEL: TIntegerField;
+    CdsRelErrosAdvertenciasITEM: TStringField;
+    CdsRelErrosAdvertenciasDATA_EMISSAO: TDateField;
+    CdsRelErrosAdvertenciasDATA_ENTRADA: TDateField;
+    CdsRelErrosAdvertenciasTIPO_ENTRADA_SAIDA: TStringField;
+    CdsRelErrosAdvertenciasFORNECEDOR_CLIENTE: TStringField;
+    OpenDialogSped: TOpenDialog;
   private
     { Private declarations }
   public
